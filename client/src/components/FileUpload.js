@@ -1,155 +1,112 @@
 import { useState } from "react";
 import axios from "axios";
+import html2canvas from 'html2canvas';
 import "./FileUpload.css";
+let fileUrl=""
 const FileUpload = ({ contract, account, provider }) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    age: "",
+    gender: "",
+    diagnosis: ""
+  });
+  //const [fileUrl, setFileUrl] = useState("");
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("No image selected");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (file) {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
 
-        const resFile = await axios({
-          method: "post",
-          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          data: formData,
-          headers: {
-            pinata_api_key: `1304d08f6c4530984c05`,
-            pinata_secret_api_key: `f0ff3be4ab9c1b2314fb14b361853482c9d9f102c42d1dd342af623ff1864f3c`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
-        //const signer = contract.connect(provider.getSigner());
-        const signer = contract.connect(provider.getSigner());
-        signer.add(account, ImgHash);
-      } catch (e) {
-        console.log(e);
-        alert("Unable to upload image to Pinata");
-      }
-    }
+  let patientForm = document.querySelector("#patient-form");
+  if (!patientForm) {
+    console.error("Element with ID 'patient-form' not found");
+    return;
+  }
+
+  const canvas = await html2canvas(document.querySelector("#patient-form"));
+  const dataUrl = canvas.toDataURL("image/jpeg");
+  const blob = dataURItoBlob(dataUrl);
+
+  try {
+    const formData = new FormData();
+    formData.append("file", blob, "patient-form.jpg");
+
+    const resFile = await axios({
+      method: "post",
+      url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+      data: formData,
+      headers: {
+        pinata_api_key: `1304d08f6c4530984c05`,
+        pinata_secret_api_key: `f0ff3be4ab9c1b2314fb14b361853482c9d9f102c42d1dd342af623ff1864f3c`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    fileUrl = `https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}`;
+    const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
+    //const signer = contract.connect(provider.getSigner());
+    const signer = contract.connect(provider.getSigner());
+    signer.add(account, ImgHash);
     alert("Successfully Image Uploaded");
     setFileName("No image selected");
     setFile(null);
+  } catch (e) {
+    console.log(e);
+    alert("Unable to upload image to Pinata");
+  }
   };
-  const retrieveFile = (e) => {
-    const data = e.target.files[0]; //files array of files object
-    // console.log(data);
-    const reader = new window.FileReader();
-    reader.readAsArrayBuffer(data);
-    reader.onloadend = () => {
-      setFile(e.target.files[0]);
-    };
-    setFileName(e.target.files[0].name);
-    e.preventDefault();
+
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: "image/jpeg" });
   };
   return (
-    <div className="top">
+    <div className="top" id="patient-form">
       <form className="form" onSubmit={handleSubmit}>
-        <label htmlFor="file-upload" className="choose">
-          Choose Image
-        </label>
-        <input
-          disabled={!account}
-          type="file"
-          id="file-upload"
-          name="data"
-          onChange={retrieveFile}
-        />
-        <span className="textArea">Image: {fileName}</span>
-        <button type="submit" className="upload" disabled={!file}>
-          Upload File
+        <div className="form-group">
+          <label htmlFor="firstName">First Name:</label>
+          <input type="text" id="firstName" name="firstName" required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastName">Last Name:</label>
+          <input type="text" id="lastName" name="lastName" required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="age">Age:</label>
+          <input type="number" id="age" name="age" required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="gender">Gender:</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="diagnosis">Diagnosis:</label>
+          <textarea id="diagnosis" name="diagnosis" required></textarea>
+        </div>
+        <button type="submit" className="submit">
+          Submit
         </button>
       </form>
+      {fileUrl && (
+        <div className="image-preview">
+          <img src={fileUrl} alt="Patient form" />
+        </div>
+      )}
     </div>
   );
-};
+      }
 export default FileUpload;
-
-// import { useState } from "react";
-// import axios from "axios";
-// import "./FileUpload.css";
-// function FileUpload({ contract, provider, account }) {
-//   // const [urlArr, setUrlArr] = useState([]);
-//   const [file, setFile] = useState(null);
-//   const [fileName, setFileName] = useState("No image selected");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       if (file) {
-//         try {
-//           const formData = new FormData();
-//           formData.append("file", file);
-
-//           const resFile = await axios({
-//             method: "post",
-//             url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-//             data: formData,
-//             headers: {
-//               pinata_api_key: `95f328a012f1634eab8b`,
-//               pinata_secret_api_key: `8ea64e6b39c91631c66128a7c0e0dde35a6fbdf797a8393cc5ba8bf8d58e9b54`,
-//               "Content-Type": "multipart/form-data",
-//             },
-//           });
-
-//           const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
-//           const signer = contract.connect(provider.getSigner());
-//           signer.add(account, ImgHash);
-
-//           //setUrlArr((prev) => [...prev, ImgHash]);
-
-//           //Take a look at your Pinata Pinned section, you will see a new file added to you list.
-//         } catch (error) {
-//           alert("Error sending File to IPFS");
-//           console.log(error);
-//         }
-//       }
-
-//       alert("Successfully Uploaded");
-//       setFileName("No image selected");
-//       setFile(null); //to again disable the upload button after upload
-//     } catch (error) {
-//       console.log(error.message); //this mostly occurse when net is not working
-//     }
-//   };
-//   const retrieveFile = (e) => {
-//     const data = e.target.files[0];
-//     console.log(data);
-
-//     const reader = new window.FileReader();
-
-//     reader.readAsArrayBuffer(data);
-//     reader.onloadend = () => {
-//       setFile(e.target.files[0]);
-//     };
-//     setFileName(e.target.files[0].name);
-//     e.preventDefault();
-//   };
-//   return (
-//     <div className="top">
-//       <form className="form" onSubmit={handleSubmit}>
-//         <label htmlFor="file-upload" className="choose">
-//           {/*turn around for avoding choose file */}
-//           Choose Image
-//         </label>
-//         <input
-//           disabled={!account} //disabling button when metamask account is not connected
-//           type="file"
-//           id="file-upload"
-//           name="data"
-//           onChange={retrieveFile}
-//         />
-//         <span className="textArea">Image: {fileName}</span>
-//         {/* choose file */}
-//         <button type="submit" disabled={!file} className="upload">
-//           Upload file
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default FileUpload;
