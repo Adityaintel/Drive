@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import html2canvas from 'html2canvas';
 import "./FileUpload.css";
+
 let fileUrl=""
 const FileUpload = ({ contract, account, provider }) => {
   const [formData, setFormData] = useState({
@@ -21,12 +22,26 @@ const FileUpload = ({ contract, account, provider }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
+    try {
+      await axios.post("http://localhost:3001/", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // ...
+    } catch (e) {
+      console.log(e);
+      alert("Unable to upload form data");
+    }
+    
 
   let patientForm = document.querySelector("#patient-form");
   if (!patientForm) {
     console.error("Element with ID 'patient-form' not found");
     return;
   }
+  console.log(formData);
 
   const canvas = await html2canvas(document.querySelector("#patient-form"));
   const dataUrl = canvas.toDataURL("image/jpeg");
@@ -41,8 +56,8 @@ const FileUpload = ({ contract, account, provider }) => {
       url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
       data: formData,
       headers: {
-        pinata_api_key: `1304d08f6c4530984c05`,
-        pinata_secret_api_key: `f0ff3be4ab9c1b2314fb14b361853482c9d9f102c42d1dd342af623ff1864f3c`,
+        pinata_api_key: `34ebd186809a7e3a50a2`,
+        pinata_secret_api_key: `1b49283abe7a6067b76e6d34e96a5a87135e1d98eb98e9b05647db46b47fb762`,
         "Content-Type": "multipart/form-data",
       },
     });
@@ -74,19 +89,23 @@ const FileUpload = ({ contract, account, provider }) => {
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="firstName">First Name:</label>
-          <input type="text" id="firstName" name="firstName" required />
+          <input type="text" id="firstName" name="firstName" required value={formData.firstName}
+            onChange={handleChange}/>
         </div>
         <div className="form-group">
           <label htmlFor="lastName">Last Name:</label>
-          <input type="text" id="lastName" name="lastName" required />
+          <input type="text" id="lastName" name="lastName" required value={formData.lastName}
+            onChange={handleChange}/>
         </div>
         <div className="form-group">
           <label htmlFor="age">Age:</label>
-          <input type="number" id="age" name="age" required />
+          <input type="number" id="age" name="age" required value={formData.age}
+            onChange={handleChange}/>
         </div>
         <div className="form-group">
           <label htmlFor="gender">Gender:</label>
-          <select id="gender" name="gender" required>
+          <select id="gender" name="gender" requiredvalue={formData.gender}
+            onChange={handleChange}>
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -95,7 +114,8 @@ const FileUpload = ({ contract, account, provider }) => {
         </div>
         <div className="form-group">
           <label htmlFor="diagnosis">Diagnosis:</label>
-          <textarea id="diagnosis" name="diagnosis" required></textarea>
+          <textarea id="diagnosis" name="diagnosis" required value={formData.diagnosis}
+            onChange={handleChange}></textarea>
         </div>
         <button type="submit" className="submit">
           Submit

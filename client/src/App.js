@@ -56,13 +56,13 @@ function App() {
       )}
 
       <div className="App">
-        <h1 style={{ color: "white" }}>Gdrive 3.0</h1>
+        <h1 style={{ color: "AntiqueWhite" }}>Electronic Health Record Framework</h1>
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
 
         <p style={{ color: "white" }}>
-          Account : {account ? account : "Not connected"}
+          Personal Identification Number : {account ? account : "Not connected"}
         </p>
         <FileUpload
           account={account}
