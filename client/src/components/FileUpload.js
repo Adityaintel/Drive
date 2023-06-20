@@ -10,7 +10,17 @@ const FileUpload = ({ contract, account, provider }) => {
     lastName: "",
     age: "",
     gender: "",
-    diagnosis: ""
+    diagnosis: "",
+    bloodPressure: "",
+    bodyTemp: "",
+    bmi: "",
+    bloodGlucose: "",
+    cholestrol: "",
+    addiction: "",
+    medication: "",
+    address: "",
+    state: "",
+    doctor: "",
   });
   //const [fileUrl, setFileUrl] = useState("");
   const [file, setFile] = useState(null);
@@ -87,6 +97,7 @@ const FileUpload = ({ contract, account, provider }) => {
   return (
     <div className="top" id="patient-form">
       <form className="form" onSubmit={handleSubmit}>
+      <div className="form-row">
         <div className="form-group">
           <label htmlFor="firstName">First Name:</label>
           <input type="text" id="firstName" name="firstName" required value={formData.firstName}
@@ -102,6 +113,8 @@ const FileUpload = ({ contract, account, provider }) => {
           <input type="number" id="age" name="age" required value={formData.age}
             onChange={handleChange}/>
         </div>
+        </div>
+        <div className="form-row">
         <div className="form-group">
           <label htmlFor="gender">Gender:</label>
           <select id="gender" name="gender" requiredvalue={formData.gender}
@@ -116,6 +129,63 @@ const FileUpload = ({ contract, account, provider }) => {
           <label htmlFor="diagnosis">Diagnosis:</label>
           <textarea id="diagnosis" name="diagnosis" required value={formData.diagnosis}
             onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="bloodPressure">Blood Pressure:</label>
+          <textarea id="bloodPressure" name="bloodPressure" required value={formData.bloodPressure}
+            onChange={handleChange}></textarea>
+        </div>
+        </div>
+        <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="bodyTemp">Body Temperature:</label>
+          <textarea id="bodyTemp" name="bodyTemp" required value={formData.bodyTemp}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="bmi">BMI:</label>
+          <textarea id="bmi" name="bmi" required value={formData.bmi}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="bloodGlucose">Blood Glucose:</label>
+          <textarea id="bloodGlucose" name="bloodGlucose" required value={formData.bloodGlucose}
+            onChange={handleChange}></textarea>
+        </div>
+        </div>
+        <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="cholestrol">Cholestrol:</label>
+          <textarea id="cholestrol" name="cholestrol" required value={formData.cholestrol}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="addiction">Addiction:</label>
+          <textarea id="addiction" name="addiction" required value={formData.addiction}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="medication">Medication:</label>
+          <textarea id="medication" name="medication" required value={formData.medication}
+            onChange={handleChange}></textarea>
+        </div>
+        </div>
+        <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="address">Address:</label>
+          <textarea id="address" name="address" required value={formData.address}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="state">State:</label>
+          <textarea id="state" name="state" required value={formData.state}
+            onChange={handleChange}></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="doctor">Doctor:</label>
+          <textarea id="doctor" name="doctor" required value={formData.doctor}
+            onChange={handleChange}></textarea>
+        </div>
         </div>
         <button type="submit" className="submit">
           Submit

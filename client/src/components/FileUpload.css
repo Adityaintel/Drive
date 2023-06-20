@@ -49,3 +49,89 @@
   div {
     padding: 5px 10px;
   }
+
+
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .form {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  
+  .submit {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit:hover {
+    background-color: #45a049;
+  }
+  
+  .image-preview {
+    margin-top: 20px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    display: block;
+  }
+  
+  /* Optional: Add additional styling for form container */
+  .form-container {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  #age {
+    width: 100%;
+  height: 65%; /* Add this line */
+  box-sizing: border-box; /* Add this line */
+  padding: 10px; /* Add this line */
+  border-radius: 6px; /* Add this line */
+  border: 1px solid #ccc; /* Add this line */
+  outline: none;
+  }

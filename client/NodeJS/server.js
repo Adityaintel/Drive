@@ -16,7 +16,7 @@ var con = mysql.createConnection({
     port: "3306",
     user: "admin",
     password: "Shivaji123#",
-    database: "Employee",
+    database: "HealthRecords",
     timeout: 60000
 });
  
@@ -34,9 +34,9 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/',(req,res)=>{
-	var {firstName,lastName,age,gender,diagnosis} =req.body;
+	var {firstName,lastName,age,gender,diagnosis,bloodPressure,bodyTemp,bmi,bloodGlucose,cholestrol,addiction,medication,address,state} =req.body;
     console.log(req.body);
-      con.query('INSERT INTO Persons (PersonID, LastName, FirstName, Address, City) VALUES (?, ?, ?, ?, ?)', [req.body.age, firstName, lastName, gender, diagnosis], function (err, result) {
+      con.query('INSERT INTO Cases (Age, Blood_Pressure, Body_temp, BMI, Blood_Glucose, Cholestrol, Addictions, Medication, Diagnosis, Gender, Address, State) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [age, bloodPressure, bodyTemp, bmi, bloodGlucose, cholestrol, addiction, medication, diagnosis, gender, address, state], function (err, result) {
         if (err) {
           console.error('Error inserting record:', err);
           res.status(500).json('Error occurred while inserting record');
